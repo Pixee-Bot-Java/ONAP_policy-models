@@ -21,6 +21,7 @@
 
 package org.onap.policy.models.simulators;
 
+import io.github.pixee.security.BoundedLineReader;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -56,7 +57,7 @@ public class TextMessageBodyHandler implements MessageBodyReader<Object> {
         try (var bufferedReader = new BufferedReader(new InputStreamReader(entityStream, StandardCharsets.UTF_8))) {
             List<Object> messages = new LinkedList<>();
             String msg;
-            while ((msg = bufferedReader.readLine()) != null) {
+            while ((msg = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
                 messages.add(msg);
             }
 
